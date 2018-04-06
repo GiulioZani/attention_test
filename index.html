@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Focus Test</title>
+
+	<link rel="stylesheet" type="text/css" href="css/skeleton.css">
+	<link rel="stylesheet" type="text/css" href="css/tooltip.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/music.js"></script>
+	<!--<script type="text/javascript" src="js/mindfulnessMeasure.js"></script>-->
+	<script type="text/javascript" src="js/main.js"></script>
+	<!--
+		http://marcgg.com/blog/2016/11/01/javascript-audio/
+	-->
+</head>
+<body>
+<div style="text-align: center">
+	<h2 class="startDisplay">Test And Train Your Focus, Simply</h2>
+	<h1 id="timer" style="margin-top: 20%"></h1>
+</div>
+<div class = "startDisplay">
+	<div id="science" hidden>
+		<i>Vilance</i> is your ability to mantain a constant level of attention as time goes on. <i>Goal focus</i> or "cognitive control" is you ability to keep a specific goal or task in mind despite distractions. These two are strongly related to your <i>working memory</i> (brain equivalent of RAM memory), fundamental for problem solving. These elements have all been shown to be proportonal to your <i>mindfulness</i>.
+		<br>
+		As you press "START" you'll hear a sequence of two
+		sounds (ex. <a href="#" onclick="playSound1()">sound-1</a>, <a href="#" onclick="playSound2()">sound-2</a>,
+		<a href="#" onclick="playSound1()">sound-1</a>, <a href="#" onclick="playSound2()">sound-2</a> ... ecc).
+		You have two tasks, each time <a href="#" onclick="playSound2()">sound-2</a> is plaied you have to press the
+		<img src="key_left.png" height="18" width="18"> key and every <a class="countIntervalDescription"></a>th (count interval) repetition of <a href="#" onclick="playSound2()">sound-2</a> you have to press both <img src="key_up.png" height="18" width="18"> and <img src="key_left.png" height="18" width="18"> keys (you may or may not press them simultaneously, it doesn't matter, as long so long as you do it as <a href="#" onclick="playSound2()">sound-2</a> is playing). If you forget to press <img src="key_up.png" height="18" width="18"> at a <a class="countIntervalDescription"></a>th <a href="#" onclick="playSound2()">sound-2</a>, you will know it since the next <a href="#" onclick="playSoundError()">sound-1 (with error)</a> will sound differently.<br>
+		Note: if you press <img src="imgs/key_up.png" height="18" width="18"> or <img src="imgs/key_left.png" height="18" width="18"> when you shouln't, those points will be subtracted from your total points, so try not to!
+		<br>
+	</div>
+	<div id="instructions">
+		<h4>How To Play</h4>
+		Please wear headphones while playing.
+		In this game, you have to tasks.
+		At the beginning you'll hear a voice telling you to which side of the headphones you have to pay attention to.
+		For instance, let's say that the voice says "right".
+		Next, you'll start hearing a short sound coming from one side of the headphones at the time.
+		If the sound comes from the right (or left, respectively) you have to press the <img src="imgs/key_left.png" height="18" width="18"> key.
+		<br>
+		Note: always the <img src="imgs/key_left.png" height="18" width="18"> key, regardless if the sounds comes from the left or the right.
+		<br>
+		So you have to ignore the sounds coming from the wrong side.
+		This is your first task.
+		<br>
+		<br>
+		Many sounds will be played, every <a class="countIntervalDescription"></a>th (count interval, which you can change in the settings below) sound coming from the right side (or left, respectively),
+		you also have to press the <img src="imgs/key_left.png" height="18" width="18" style="transform: rotate(90deg);"> key.
+		If you realize you wondered off and lost the count, you can simply press the <img src="imgs/key_left.png" style="transform: rotate(180deg);" height="18" width="18">
+		to reset the count.
+		<br>
+		Note: if you've forgotten to press the <img src="imgs/key_left.png" height="18" width="18" style="transform: rotate(90deg);"> at the <a class="countIntervalDescription"></a>th
+		sound played on the right (or left, respectively) side and you didn't reset the count, you'll hear an annoying sound signaling you
+		that you got distracted. <br>
+		This is your second task.
+		<br>
+		<br>
+		After 30 seconds, the voice will say "left" (or right, respectively)
+		and you'll have to start paying attention to opposite side of the headphone.
+		<br>
+		<br>
+		Your aim is to collect as many points as possible, each time you correctly
+		press the <img src="imgs/key_left.png" height="18" width="18"> key you get a correct match and earn 1 point.
+		Each time you press correctly the <img src="imgs/key_left.png" height="18" width="18" style="transform: rotate(90deg);"> key you get a correct count and
+		earn <a class="countIntervalDescription"></a> points.
+		<br>
+		Each time you press <img src="imgs/key_left.png" height="18" width="18"> when you shouldn't
+		you get a false positive match, which is equivalent to -1 point in the final score.
+		Similarly, each time you press  <img src="imgs/key_left.png" height="18" width="18" style="transform: rotate(90deg);"> when you shouldn't
+		you get a false positive count, which is equivalent to -<a class="countIntervalDescription"></a> points in the final score.
+		<br>
+		Note: if you press twice the key when the correct sound is still playing,
+		that does not count like a false positive match (or count, respectively).
+
+		This test is meant to be hard, so don't worry if you feel confused the first time.
+		Also if it's your first time playing it's recommended to choose the <span style="color:#1ed1ff">easy</span> difficulty.
+	</div>
+	<br>
+	<table id="settings">
+		<tr>
+			<td><h4 >Measure duration in minutes:</h4></td>
+			<td><input  type="number" id="duration" min="1" onchange="measureDurationTimeHasChanged()"></td>
+		</tr>
+		<tr>
+			<td><h4 >Count interval:</h4></td>
+			<td><input  type="number" id="countInterval" min="3" onchange="countIntervalHasChanged()"></td>
+		</tr>
+		<tr>
+			<td><h4 >Difficulty:</h4></td>
+			<td><div style="text-align: center; border-radius: 25px" id="difficultyLabel"></div>
+				<input id="difficulty" onchange="difficultyHasChanged()" type="range" min="0" max="2"></td>
+		</tr>
+	</table>
+	<div style="text-align: center">
+		<button onclick="start()" id="buttonStart" class="button-primary">START</button>
+	</div>
+</div>
+<div style="text-align: center" id="displayResults">
+	<h2>Congrats!</h2>
+	<table  style="text-align: center">
+		<tr><td><h5 class="tooltip">Score:<sub class="dot">?</sub><span class="tooltiptext"> =sign(points)*points*ratio </span></h5></td>		<td id = "score" ></td></tr>
+		<tr><td><h5 class="tooltip">Ratio:<sub class="dot">?</sub><span class="tooltiptext"> =points/total_points </span></h5></td>		<td id = "ratio" ></td></tr>
+		<tr><td><h5 class="tooltip">Points:<sub class="dot">?</sub><span class="tooltiptext"> = correct_matches - false_positive_matches + count_interval*(correct_counts - false_positive_counts) </span></h5>	</td>		<td id = "points" ></td></tr>
+		<tr><td><h5 class="tooltip">Total points:<sub class="dot">?</sub><span class="tooltiptext"> =loops + count_interval*least_approximation(loops/count_interval) </span></h5></td>	<td id = "totalPoints" ></td> </tr>
+
+		<tr><td><h5>Date: </h5></td>	<td id = "date" ></td></tr>
+		<tr><td><h5>Time: </h5></td>	<td id = "time" ></td></tr>
+		<tr><td><h5>Duration: </h5></td>	<td id = "durationDisplay" ></td></tr>
+		<tr><td><h5>Number of loops: </h5></td>	<td id = "loops" ></td></tr>
+		<tr><td><h5>Correct matches: </h5></td>	<td id = "correctMatches"></td></tr>
+		<tr><td><h5>False positive matches </h5></td>	<td id = "falsePositiveMatches"></td></tr>
+		<tr><td><h5>Correct counts: </h5></td>	<td id = "correctCounts"></td></tr>
+		<tr><td><h5>False positive counts: </h5></td>	<td id = "falsePositiveCounts"></td></tr>
+		<tr><td><h5>Total total number of counts: </h5></td>	<td id = "totalNumberCounts"></td></tr>
+	</table>
+</div>
+<!--<button onclick="soundLooper.end()">END</button>-->
+</body>
+</html>

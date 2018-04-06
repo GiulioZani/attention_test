@@ -1,0 +1,41 @@
+<html>
+<head>
+	<title>Mindfulness test</title>
+	<script>
+		function sound(src,ended) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }
+    this.sound.addEventListener("ended", ()=>{
+     this.sound.currentTime = 0;
+     ended();
+ });
+}
+	</script>
+</head>
+<body>
+
+<!--
+<embed src="/first.mp3" autostart="false" width="0" height="0" id="firstSound"
+enablejavascript="true">
+<embed src="/second.mp3" autostart="false" width="0" height="0" id="secondSound"
+enablejavascript="true">
+-->
+<script type="text/javascript">
+	var sound1 = new sound("first.mp3",()=>{sound2.play()});
+	var sound2 = new sound("second.mp3",()=>{sound1.play()});
+</script>
+<button onclick="sound1.play()">Ciao</button>
+
+</body>
+
+</html>
